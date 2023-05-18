@@ -4,16 +4,14 @@ class Computer
 {
     protected $monitor;
     protected $mbo;
-    protected $keyboard;
     protected $ram;
     protected $ssd;
     protected $cpu;
 
-    public function __construct($monitor, $mbo, $keyboard, $ram, $ssd, $cpu)
+    public function __construct($monitor, $mbo, $ram, $ssd, $cpu)
     {
         $this->monitor = $monitor;
         $this->mbo = $mbo;
-        $this->keyboard = $keyboard;
         $this->ram = $ram;
         $this->ssd = $ssd;
         $this->cpu = $cpu;
@@ -23,7 +21,6 @@ class Computer
     {
         $info = "Monitor: " . $this->monitor->getInfo() . "<br>";
         $info .= "Motherboard: " . $this->mbo->getInfo() . "<br>";
-        $info .= "Keyboard: " . $this->keyboard->getInfo() . "<br>";
         $info .= "RAM: " . $this->ram->getInfo() . "<br>";
         $info .= "SSD: " . $this->ssd->getInfo() . "<br>";
         $info .= "CPU: " . $this->cpu->getInfo() . "<br>";
@@ -31,9 +28,7 @@ class Computer
         return $info;
     }
 
-    // Getter e setter per le componenti del computer
-    // ...
-
+  
 }
 
 class Monitor
@@ -72,22 +67,21 @@ class Motherboard
     // ...
 }
 
-class Keyboard
+trait Keyboard
 {
     protected $type;
-
-    public function __construct($type)
+    public function setInfoKeyBoard(String $_type )
     {
-        $this->type = $type;
+      $this->type = $_type;
     }
 
-    public function getInfo()
+
+    public function getInfoKeyBoard()
     {
-        return "Type: " . $this->type;
+        return  $this->type;
     }
 
-    // Getter e setter per le proprietà della tastiera
-    // ...
+    
 }
 
 class RAM
@@ -146,18 +140,35 @@ class CPU
 
 class Desktop extends Computer
 {
+    use KeyBoard;
     public function getType()
     {
         return "Desktop";
     }
+
+    public function getInfo()
+    {
+        $info = "Monitor: " . $this->monitor->getInfo() . "<br>";
+        $info .= "Motherboard: " . $this->mbo->getInfo() . "<br>";
+        $info .= "RAM: " . $this->ram->getInfo() . "<br>";
+        $info .="KeyBoard: " . $this->getInfoKeyBoard() . "<br>";
+        $info .= "SSD: " . $this->ssd->getInfo() . "<br>";
+        $info .= "CPU: " . $this->cpu->getInfo() . "<br>";
+
+        return $info;
+    }
 }
 
 class Laptop extends Computer
+
 {
+    use KeyBoard;
+
     public function getType()
     {
         return "Laptop";
     }
+    
 }
 
 // Creazione di un array di oggetti per rappresentare il set di dati
@@ -165,7 +176,6 @@ $devices = [
     new Desktop(
         new Monitor("24 inch"),
         new Motherboard("Model XYZ"),
-        new Keyboard("Mechanical"),
         new RAM("16GB"),
         new SSD("500GB"),
         new CPU("Intel i7")
@@ -173,13 +183,12 @@ $devices = [
     new Laptop(
         new Monitor("15 inch"),
         new Motherboard("Model ABC"),
-        new Keyboard("Backlit"),
         new RAM("8GB"),
         new SSD("256GB"),
         new CPU("AMD Ryzen 5")
     ),
 ];
-
+$devices[0]->setInfoKeyBoard('Meccanica');
 ?>
 <!DOCTYPE html>
 <html>
